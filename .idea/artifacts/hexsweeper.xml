@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="hexsweeper">
+    <output-path>$PROJECT_DIR$/out/artifacts/hexsweeper</output-path>
+    <root id="archive" name="hexsweeper.jar" />
+  </artifact>
+</component>
