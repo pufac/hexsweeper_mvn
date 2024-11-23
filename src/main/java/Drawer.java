@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Pálya kirajzoló class
+ */
 public class Drawer extends JPanel {
 
     int numx, numy;
@@ -16,6 +19,12 @@ public class Drawer extends JPanel {
 
     int topoffset = 40;
 
+    /**
+     * Rajzoló class konstruktora
+     * @param numx Pálya szélessége hexagon számban (X)
+     * @param numy Pálya magassága hexagon számban (Y)
+     * @param offset
+     */
     public Drawer(int numx, int numy, int offset) {
         this.numx = numx;
         this.numy = numy;
@@ -23,12 +32,21 @@ public class Drawer extends JPanel {
         this.setBackground(bg);
     }
 
+    /**
+     * Meghívja a JPanel paintComponentjét, és a DrawHexagons(Graphics)-ot
+     * @param g the <code>Graphics</code> object to protect
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Drawhexagons(g);
     }
 
+    /**
+     * Ez a függvény kirajzolja a drawer JPanel-jére a hexagonokat. Ez be is színezi be pirosra (ha megnyomott bomba), sárgára (ha flagged), fehérre (ha már felfedezett).
+     * A tile-okon lévő számokért is ez felelős. Miután kész van, meghívja a repaint() függvényt
+     * @param g Graphics
+     */
     public void Drawhexagons(Graphics g){
         game.gamewindow.setBackground(bg);
         Graphics2D g2d = (Graphics2D) g;
@@ -103,6 +121,11 @@ public class Drawer extends JPanel {
         game.gamewindow.repaint();
     }
 
+    /**
+     * Megkap egy számot, és vissza ad egy színt, hogy milyen színnel legyen ez a szám kiírva a felfedett tile-ra
+     * @param num A szám (0-6)
+     * @return A szín (Color)
+     */
     private Color DetermineStringColour(int num){
         switch (num){
             case 0:

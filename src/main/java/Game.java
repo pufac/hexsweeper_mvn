@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Random;
 
+/**
+ * Ez a fő game loop class
+ */
 public class Game implements Serializable {
     public JFrame gamewindow;
     public LinkedList<LinkedList<Tile>> grid = new LinkedList<LinkedList<Tile>>();
@@ -35,6 +38,10 @@ public class Game implements Serializable {
     }
 
 
+    /**
+     * Inicializál egy játékot, a megadott beállításokkal
+     * @param settings A beállítások
+     */
     public void init(Settings settings)
     {
         gamewindow = new JFrame("MINESWEEPER");
@@ -60,16 +67,23 @@ public class Game implements Serializable {
                     int n = JOptionPane.showOptionDialog(null, "Biztos, hogy ki akarsz lépni?","Kilépés",
                             JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                     if(n == 1){
-                        StartNewGame();
+                        Object[] options1 = { "Igen", "Mégse"};
+                        int n1 = JOptionPane.showOptionDialog(null, "Biztos szeretnél új játékot?","Új játék?",
+                                JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE, null, options1, options1[0]);
+                        if(n1 == 0) StartNewGame();
                     }
                     if(n == 2)
                     {
+                        Object[] options1 = { "Igen", "Nincs mentés"};
+                        int n1 = JOptionPane.showOptionDialog(null, "El szeretnéd menteni előtte?","Mentés?",
+                                JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE, null, options1, options1[0]);
+                        if(n1 == 0) Main.serializer.Serialize(false);
+
                         Main.mainmenu.setVisible(true);
                         gamewindow.dispose();
                     }
                     if(n == 3){
-                        Main.serializer.Serialize();
-                        System.exit(0);
+                        Main.serializer.Serialize(true);
                     }
 
 
@@ -126,6 +140,10 @@ public class Game implements Serializable {
         gamewindow.setSize(lastpointX.x + 25, lastpointY.y + 45);
     }
 
+    /**
+     * Megnézi, hogy nyert-e a játékos (megnézi hány tile lehet maximum felfedhető, és hogy hány van felfedve)
+     * @param popup Felugorjon-e a "Nyertél!" ablak
+     */
     public void CheckWinCondition(boolean popup){
         int normaltiles = settings.x * settings.y - settings.bombs - totalghostcount;
         int current = 0;
@@ -162,6 +180,9 @@ public class Game implements Serializable {
         }
     }
 
+    /**
+     * Nyit egy új játékot, ugyan azzal a beállításokkal, mint az előző játék volt
+     */
     public void StartNewGame()
     {
         Game newgame = new Game();
@@ -175,6 +196,12 @@ public class Game implements Serializable {
         gamewindow.repaint();
     }
 
+    /**
+     * Ha egy nullás tile-ra klikkelünk, akkor ez a rekurzív függvény lefut, és megnézi, hogy a környező tile-ok nullák-e.
+     * Ha igen, akkor azokra is meghívja ezt. (Tile grid indexekkel működik)
+     * @param x X. tile
+     * @param y Y. tile
+     */
     public void RecursiveDiscovery(int x, int y){
 
         if(grid.get(x).get(y).bombcount != 0 || !grid.get(x).get(y).hidden)
@@ -208,6 +235,11 @@ public class Game implements Serializable {
         }
     }
 
+    /**
+     * Ez jobbklikkel egy tile-ra
+     * @param tile Megadott tile
+     * @param a Tile indexe a gridben
+     */
     public void ClickedRight(Tile tile, int[] a)
     {
         //Tile clickedTile = GetClickedTile(e.getPoint());
@@ -225,6 +257,12 @@ public class Game implements Serializable {
         }
     }
 
+
+    /**
+     * Ez balklikkel egy tile-ra
+     * @param tile Megadott tile
+     * @param a Tile indexe a gridben
+     */
     public void ClickedLeft(Tile tile, int[] a){
         //System.out.println("left: " + GetClickedTile(e.getPoint()));
         //Tile tile = GetClickedTile(e.getPoint());
@@ -257,6 +295,9 @@ public class Game implements Serializable {
         tile.hidden = false;
     }
 
+    /**
+     * Elosztja a bombákat a griden
+     */
     public void DistributeBombs(){
         placedbombs = 0;
 
@@ -283,6 +324,12 @@ public class Game implements Serializable {
         drawer.repaint();
     }
 
+    /**
+     * Megnézi, hogy veszt-e a player a jelenlegi kattintásnál
+     * @param popup Felugorjon-e a "Vesztettél!" popup
+     * @param a Kattintott tile indexe
+     * @return Vesztett-e
+     */
     public boolean DoesPlayerDie(boolean popup, int[] a){
         grid.get(a[0]).get(a[1]).clickedbomb = true;
         if(secondchance)
@@ -330,6 +377,10 @@ public class Game implements Serializable {
         return true;
     }
 
+
+    /**
+     * Minden tile-ra ráírja, hogy hány bomba van körülötte
+     */
     public void MarkTilesForBombs()
     {
         int bombs = 0;
@@ -365,6 +416,11 @@ public class Game implements Serializable {
         drawer.repaint();
     }
 
+    /**
+     * Feltölti a gridet hexagonokkal
+     * @param numx Hány legyen egy sorban
+     * @param numy Hány legyen egy oszlopban
+     */
     public void GenerateHexagons(int numx, int numy)
     {
         int ghostcount = 0;
@@ -395,6 +451,12 @@ public class Game implements Serializable {
         totalghostcount = ghostcount;
     }
 
+
+    /**
+     * Visszaadja a klikkelt Tile-t
+     * @param p A klikkelt JFrame koordináta
+     * @return A klikkelt Tile
+     */
     public Tile GetClickedTile(Point p)
     {
         System.out.println("click: " + p);
@@ -416,6 +478,11 @@ public class Game implements Serializable {
         return null;
     }
 
+    /**
+     * Visszaadja a klikkelt Tile indexét
+     * @param p A klikkelt JFrame koordináta
+     * @return A klikkelt tile indexjei
+     */
     private int[] GetClickedTileIndex(Point p)
     {
         for (int i = 0; i < grid.size(); i++) {

@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * Main class
+ */
 public class Main {
     public static JFrame mainmenu;
     public static Settings settings = new Settings();
@@ -18,6 +21,9 @@ public class Main {
         setupMainmenu();
     }
 
+    /**
+     * Főmenü inicializálás
+     */
     public static void init()
     {
         mainmenu = new JFrame("HexSweeper");
@@ -28,7 +34,6 @@ public class Main {
         mainmenu.setVisible(true);
         serializer = new Serializer();
         try {
-            // Set cross-platform Java L&F (also called "Metal")
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
         }
@@ -44,6 +49,13 @@ public class Main {
 
     }
 
+    /**
+     * Kiszámolja, hogy hány bomba kell legyen a pályán, ha tudjuk a pálya méretét
+     * @param x Pálya mérete (vízszintesen)
+     * @param y Pálya mérete (függőlegesen)
+     * @param diff Játék nehézsége
+     * @return Bombák száma
+     */
     public static int tryCalculateBombs(JTextField x, JTextField y, String diff){
         if(!x.getText().isEmpty() && !y.getText().isEmpty()){
             int mult = Integer.parseInt(x.getText()) * Integer.parseInt(y.getText());
@@ -65,6 +77,9 @@ public class Main {
         return -1;
     }
 
+    /**
+     * Összerakja a főmenüt, rárakja a gombokat, beállítja azok funkcióit
+     */
     public static void setupMainmenu(){
 
         //ghost checkbox
@@ -232,6 +247,10 @@ public class Main {
         mainmenu.repaint();
     }
 
+    /**
+     * Új játékot indít (van egy másik új játék indító is, ez kizárólag a főmenüből való indítást csinálja, a másik az már meglévő játékot indít újra)
+     * @param settings A játék beállításai (Settings class)
+     */
     public static void newgame(Settings settings){
         if(checkifcorrectsettings(true))
         {
@@ -242,6 +261,11 @@ public class Main {
 
     }
 
+    /**
+     * Ellenőrzi, hogy helyes beállításokkal akarjuk-e indítani a játékot
+     * @param popup Feldobja-e az error popupot
+     * @return
+     */
     public static boolean checkifcorrectsettings(boolean popup){
         if(settings.bombs > settings.x * settings.y || (settings.bombs == 0 ||settings.bombs == -1)){
             if(popup) JOptionPane.showMessageDialog(null,"There are more bombs than tiles, or zero bombs\n" + settings.bombs, "Game can't be started", JOptionPane.ERROR_MESSAGE);
