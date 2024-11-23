@@ -6,11 +6,20 @@ import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tesztelő class
+ * Lefuttat összesen 12 tesztet, 3 classen keresztül
+ */
 public class HexsweeperTest {
 
     Game game;
     Settings s;
 
+    /**
+     * Lefut minden teszt előtt egy pálya inicializálás. Van benne egy feltétel, hogyha a lefuttatandó teszt nevébe szerepel az hogy "Custom", akkor
+     * nem futtatja ezt le. Ezáltal lehet akármelyik tesztnek saját inicializálást csinálni.
+     * @param testInfo Ebbe van benne, hogy melyik teszt fut
+     */
     @BeforeEach
     public void init(TestInfo testInfo) {
         if(testInfo.toString().contains("Custom"))
@@ -27,6 +36,9 @@ public class HexsweeperTest {
         game.init(s);
     }
 
+    /**
+     * Teszteli hogy megfelelő mennyiségű bombát generál-e a játék
+     */
     @Test // game.DistributeBombs
     public void TestBombCount(){
 
@@ -40,6 +52,9 @@ public class HexsweeperTest {
         assertEquals(s.bombs,bombcount);
     }
 
+    /**
+     * Teszteli, hogy jól reagál-e a játék, ha egy tile-ra balklikkelek (felfedi-e). Bárhova klikkelhetne a teszt, az első klikk sosem lesz bomba (firstclick = false)
+     */
     @Test //game.ClickedLeft
     public void TestLeftClickedTile(){
         int[] a = {0,0};
@@ -48,6 +63,9 @@ public class HexsweeperTest {
         assertFalse(firsttile.hidden);
     }
 
+    /**
+     * Teszteli, hogy jól reagál-e a játék, ha egy tile-ra jobbklikkelek (rak-e zászlót)
+     */
     @Test //game.ClickedRight
     public void TestRightClickedTile(){
         int[] a = {0,0};
@@ -56,10 +74,12 @@ public class HexsweeperTest {
         assertTrue(firsttile.flagged);
     }
 
+    /**
+     * Teszteli, hogy létrejön-e a gamewindow inicializáláskor
+     */
     @Test //game.init
     public void TestGameWindow(){
         try {
-            int bomb;
             JFrame gamewindow = game.gamewindow;
         }
         catch (Exception e) {
@@ -67,6 +87,9 @@ public class HexsweeperTest {
         }
     }
 
+    /**
+     * Teszteli, hogy nyer-e a játékos ha nincsen több felfedezetlen tile
+     */
     @Test //game.CheckWinCondition
     public void TestCustomWinCondition(){
         s = new Settings();
@@ -85,6 +108,9 @@ public class HexsweeperTest {
         assertTrue(game.gamewon);
     }
 
+    /**
+     * Teszteli, hogy veszít-e a játékos ha bombára kattint (secondchance ilyenkor ki van kapcsolva)
+     */
     @Test //game.DoesPlayerDie
     public void TestCustomDeath(){
         s = new Settings();
@@ -102,6 +128,9 @@ public class HexsweeperTest {
 
     }
 
+    /**
+     * Teszteli, hogy jól számozza-e meg a tile-okat a játék, ha van körülöttük bomba
+     */
     @Test //game.MarkTilesForBombs
     public void TestCustomMarkBombs(){
         s = new Settings();
@@ -124,6 +153,9 @@ public class HexsweeperTest {
 
     }
 
+    /**
+     * Teszteli a rekurzív feldefezés függvényt, azaz, hogyha klikkelek egy üres tile-ra, akkor a környezőket felfedi-e
+     */
     @Test //game.RecursiveDiscovery
     public void TestCustomRecursiveDiscovery(){
         s = new Settings();
@@ -142,6 +174,9 @@ public class HexsweeperTest {
 
     }
 
+    /**
+     * Teszteli, hogy a GetClickedTile függvény megfelelő tile-t ad-e vissza
+     */
     @Test //game.GetClickedTile
     public void TestCorrectTileReturn(){
         Point p = new Point(50,80);
@@ -152,6 +187,9 @@ public class HexsweeperTest {
 
     }
 
+    /**
+     * Teszteli, hogy sikeresen kezdd-e új játékot
+     */
     @Test //game.StartNewGame
     public void TestStartNewGame(){
         game.StartNewGame();
@@ -161,6 +199,9 @@ public class HexsweeperTest {
 
     }
 
+    /**
+     * Teszteli, hogy 6 pontja lett-e egy generált tile-nak
+     */
     @Test //tile.generatePointsFromCenter
     public void TestPointsOfHexagon(){
         Tile tile = game.grid.get(0).get(0);
@@ -173,6 +214,9 @@ public class HexsweeperTest {
 
     }
 
+    /**
+     * Teszteli, hogy tényleg nem lehet-e rossz beállításokkal elinditani a játékot
+     */
     @Test //tile.generatePointsFromCenter
     public void TestCustomSettingsErrors(){
         int fails = 0;
