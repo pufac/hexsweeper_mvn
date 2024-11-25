@@ -28,6 +28,7 @@ public class Main {
     {
         mainmenu = new JFrame("HexSweeper");
         mainmenu.setSize(400,400);
+        mainmenu.setLocationRelativeTo(null);
         mainmenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainmenu.setLayout(null);
         mainmenu.setBackground(Color.darkGray);
@@ -96,7 +97,7 @@ public class Main {
 
         //second chance checkbox
         JCheckBox secondchancecheckbox = new JCheckBox("Enable second chance");
-        secondchancecheckbox.setSelected(true);
+        secondchancecheckbox.setSelected(false);
         secondchancecheckbox.setBounds(20,240,400,30);
         secondchancecheckbox.addActionListener(new ActionListener() {
             @Override
@@ -104,7 +105,7 @@ public class Main {
                 settings.secondchance = secondchancecheckbox.isSelected();
             }
         });
-        settings.secondchance = true;
+        settings.secondchance = false;
 
         //main title
         JLabel title = new JLabel("HEXSWEEPER");
@@ -151,8 +152,8 @@ public class Main {
 
             }
         });
-        sizeX.setText("40");
-        settings.x = 40;
+        sizeX.setText("20");
+        settings.x = 20;
 
         //height label
         JLabel heightLabel = new JLabel("Map Height:");
@@ -172,8 +173,8 @@ public class Main {
 
             }
         });
-        sizeY.setText("17");
-        settings.y = 17;
+        sizeY.setText("10");
+        settings.y = 10;
 
         //bombs
         JLabel bomblabel = new JLabel("Bombs:");
